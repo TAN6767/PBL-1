@@ -288,7 +288,7 @@ void CapMSSV(SV list[], int stdcount)
     {
         if (list[i].checksort == false)
         {
-            printf("Vui lòng sắp xếp danh sách trước!\n");
+            printf("Vui lòng sắp xếp danh sách trước ❌\n");
             return;
         }
     }
@@ -301,7 +301,7 @@ void CapMSSV(SV list[], int stdcount)
         strcpy(list[i].ID, tempID);
         list[i].checkMSSV = true;
     }
-    printf("Cấp MSSV thành công!!!\n");
+    printf("Cấp MSSV thành công ✅\n");
 }
 
 void CapEmail(SV list[], int stdcount)
@@ -310,7 +310,7 @@ void CapEmail(SV list[], int stdcount)
     {
         if (list[i].checkMSSV == false) 
         {
-            printf("Vui lòng cấp MSSV trước!\n");
+            printf("Vui lòng cấp MSSV trước ❌\n");
             return ;
         }
     }
@@ -320,7 +320,7 @@ void CapEmail(SV list[], int stdcount)
         strcat(list[i].email,"@sv.dut.udn.vn");
         list[i].checkemail = true;
     }
-    printf("Cấp email thành công!\n");
+    printf("Cấp email thành công ✅\n");
     PrintToFile(list, stdcount);
 }
 
@@ -345,6 +345,33 @@ void TimKiemSVtheoID(SV list[], int n, char ID[])
     {
         printf("Không tìm thấy sinh viên có ID %s!\n",ID);
     }
+}
+
+void XoaSVtheoID(SV list[], int stdcount, char ID[])
+{
+    bool found = false;
+
+    for (int i = 0; i < stdcount ; i++)
+    {
+        if (strcmp(list[i].ID, ID) == 0)
+        {
+            found = true;
+            for (int j = i ; j < stdcount ; j++)
+            {
+                list[i] = list[i+1];
+            }
+            stdcount--;
+
+            FILE *file;
+            file = fopen(filename, "w");
+            PrintToFile(list, stdcount);
+            fclose(file);
+
+        }
+        break;
+    }
+
+    if (!found) printf("Không tìm thấy sinh viên có ID muốn xóa!!!\n");
 }
 
 void GanMang(SV list[])
@@ -378,10 +405,10 @@ void XemDanhSachTheoLop()
     char class[max_class];
     printf("Nhập lớp cần xem: ");
     fgets(class, sizeof(class), stdin);
-    XoaEnter(class); // Xóa ký tự Enter khi nhập lớp
+    XoaEnter(class); 
 
     char filename[MAX_SIZE];
-    sprintf(filename, "%s.txt", class); // Tạo tên file dựa trên tên lớp
+    sprintf(filename, "%s.txt", class);
 
     FILE *file = fopen(filename, "r");
     if (file == NULL)
@@ -411,14 +438,14 @@ void MainMenu(SV list[])
         printf("    ╔═════════════════════════════════════════════════╗\n");
         printf("    ║            QUẢN LÍ DANH SÁCH SINH VIÊN          ║\n");
         printf("    ╠═════════════════════════════════════════════════╣\n");
-        printf("    ║ ▷  1.    Thêm sinh viên                         ║\n");
-        printf("    ║ ▷  2.    Sắp xếp danh sách                      ║\n");
-        printf("    ║ ▷  3.    Xóa sinh viên                          ║\n");
-        printf("    ║ ▷  4.    Tìm sinh viên                          ║\n");
-        printf("    ║ ▷  5.    Cấp mã sinh viên                       ║\n");
-        printf("    ║ ▷  6.    Cấp email                              ║\n");
-        printf("    ║ ▷  7.    In danh sách sinh viên ra màn hình     ║\n");
-        printf("    ║ ▷  0.    Thoát                                  ║\n");
+        printf("    ║ ➢  1.    Thêm sinh viên                         ║\n");
+        printf("    ║ ➢  2.    Sắp xếp danh sách                      ║\n");
+        printf("    ║ ➢  3.    Xóa sinh viên                          ║\n");
+        printf("    ║ ➢  4.    Tìm sinh viên                          ║\n");
+        printf("    ║ ➢  5.    Cấp mã sinh viên                       ║\n");
+        printf("    ║ ➢  6.    Cấp email                              ║\n");
+        printf("    ║ ➢  7.    In danh sách sinh viên ra màn hình     ║\n");
+        printf("    ║ ➢  0.    Thoát                                  ║\n");
         printf("    ╚═════════════════════════════════════════════════╝\n\n");
 
     	printf("Nhập yêu cầu của bạn: ");
@@ -433,7 +460,7 @@ void MainMenu(SV list[])
                 NhapSVN(list,&n);
                 
                 TaoFile(list, n);
-                printf("Ban da nhap thanh cong!\n");
+                printf("Bạn đã nhập thành công ✅!\n");
                 nhap=true;
                 printf("Nhấn phím bất kì để tiếp tục!\n");
                 getch();
@@ -446,20 +473,25 @@ void MainMenu(SV list[])
                 DocFile(&stdcount);
                 SapXepBubbleSort(list,stdcount);
                 PrintToFile(list,stdcount);
-                stdcount = 0;
-                printf("Danh sách đã được sắp xếp!\n");
+                printf("Danh sách đã được sắp xếp ✅\n");
                 printf("Nhấn phím bất kì để tiếp tục!\n");
                 getch();
                 nhap = true;
                 break;
             case 3:
-                printf("Nhập id cần tìm kiếm: ");
+                printf("Nhập ID của sinh viên muốn xóa: ");
                 fgets(ID,10,stdin);
                 XoaEnter(ID);
-                TimKiemSVtheoID(list,n,ID);
+                XoaSVtheoID(list,stdcount,ID);
+                getch();
                 nhap = true;
                 break;
             case 4:
+                printf("Nhập ID của sinh viên cần tìm kiếm: ");
+                fgets(ID,10,stdin);
+                XoaEnter(ID);
+                TimKiemSVtheoID(list,stdcount,ID);
+                getch();
                 nhap = true;
                 break;
             case 5:
@@ -505,12 +537,8 @@ void MainMenu(SV list[])
     while(nhap);
 }
 
-int RunProgram()
+void RunProgram()
 {
-    int i;
-
     NhapBanDau();
     MainMenu(list);
-
-    return 0;
 }
