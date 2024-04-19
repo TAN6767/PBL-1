@@ -138,7 +138,20 @@ void NhapBanDau()
     printf("Nhập mã khóa: ");
     scanf("%s", schoolyear);
 
-    printf("101: ");
+    printf("\n101: Khoa Cơ khí \n");
+    printf("102: Khoa Công nghệ thông tin \n");
+    printf("103: Khoa Cơ khí giao thông \n");
+    printf("104: Khoa CN Nhiệt - Điện lạnh \n");
+    printf("105: Khoa Điện \n");
+    printf("106: Khoa Điện tử viễn thông \n");
+    printf("107: Khoa Hóa \n");
+    printf("109: Khoa Xây dựng Cầu - Đường");
+    printf("110: Khoa Xây dựng Dân dụng - Công nghiệp \n");
+    printf("111: Khoa Xây dựng Công trình thủy \n");
+    printf("117: Khoa Môi trường \n");
+    printf("118: Khoa Quản lí dự án \n");
+    printf("121: Khoa Kiến trúc \n");
+    printf("123: Khoa Công nghệ tiên tiến \n\n");
 
     printf("Nhập mã khoa: ");
     scanf("%s",faculitycode);
@@ -209,7 +222,7 @@ void NhapSVN(SV list[],int *n)
         {
             printf("Bạn có muốn tiếp tục không? [y/n]");
             scanf("%c", &choice);
-        } while (choice != 'n' || choice != 'y');
+        } while (choice != 'n' && choice != 'N' && choice != 'y' && choice != 'Y' );
         getchar();
         if (choice == 'n') break;
         
@@ -281,7 +294,7 @@ void CapMSSV(SV list[], int stdcount)
     for (int i = 0; i < stdcount; i++)
     {
         char tempID[MAX_SIZE];
-        sprintf(tempID, "%s%s%03d",faculitycode, schoolyear, i + 1);
+        sprintf(tempID, "%s%s%04d",faculitycode, schoolyear, i + 1);
 
         strcpy(list[i].ID, tempID);
         list[i].checkMSSV = true;
@@ -392,16 +405,17 @@ void MainMenu(SV list[])
     int key;
     do
     	{
-        printf("\n\n============= QUẢN LÍ DANH SÁCH SINH VIÊN ===========\n");
-        printf("===   1.    Thêm sinh viên                        ===\n");
-        printf("===   2.    Sắp xếp danh sách                     ===\n");
-        printf("===   3.    Xóa sinh viên                         ===\n");
-        printf("===   4.    Tìm sinh viên                         ===\n");
-        printf("===   5.    Cấp mã sinh viên                      ===\n");
-        printf("===   6.    Cấp email                             ===\n");
-        printf("===   7.    In danh sách sinh viên ra màn hình    ===\n");
-        printf("===   0.    Thoát                                 ===\n");
-        printf("=====================================================\n\n");
+        printf("\n\n");
+        printf("╻━━━━━━━━━ QUẢN LÍ DANH SÁCH SINH VIÊN ━━━━━━━━━╻\n");
+        printf("┃ ▷  1.    Thêm sinh viên                       ┃\n");
+        printf("┃ ▷  2.    Sắp xếp danh sách                    ┃\n");
+        printf("┃ ▷  3.    Xóa sinh viên                        ┃\n");
+        printf("┃ ▷  4.    Tìm sinh viên                        ┃\n");
+        printf("┃ ▷  5.    Cấp mã sinh viên                     ┃\n");
+        printf("┃ ▷  6.    Cấp email                            ┃\n");
+        printf("┃ ▷  7.    In danh sách sinh viên ra màn hình   ┃\n");
+        printf("┃ ▷  0.    Thoát                                ┃\n");
+        printf("╹━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╹\n\n");
     	printf("Nhập yêu cầu của bạn: ");
         scanf("%d",&key);
         getchar();
@@ -494,4 +508,3 @@ int RunProgram()
 
     return 0;
 }
-
