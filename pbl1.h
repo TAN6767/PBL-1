@@ -200,7 +200,9 @@ void NhapSVN(SV list[],int *n)
         getchar();
         if (p<=0) 
         {
-            printf("Vui lòng nhập lại n>0\n");
+            printf("Số lượng sinh viên không hợp lệ!!!\n");
+            printf("Vui lòng nhập lại!!!\n");
+            getch();
         }
     } while(p<=0);
     fflush(stdin);
@@ -211,7 +213,7 @@ void NhapSVN(SV list[],int *n)
 
     do
     {
-        printf("\nNhap SV thu %d: \n",i+1);
+        printf("\nNhập sinh viên thứ %d: \n",i+1);
         NhapSV(&list[i]);
 
         i++;
@@ -406,16 +408,19 @@ void MainMenu(SV list[])
     do
     	{
         printf("\n\n");
-        printf("╻━━━━━━━━━ QUẢN LÍ DANH SÁCH SINH VIÊN ━━━━━━━━━╻\n");
-        printf("┃ ▷  1.    Thêm sinh viên                       ┃\n");
-        printf("┃ ▷  2.    Sắp xếp danh sách                    ┃\n");
-        printf("┃ ▷  3.    Xóa sinh viên                        ┃\n");
-        printf("┃ ▷  4.    Tìm sinh viên                        ┃\n");
-        printf("┃ ▷  5.    Cấp mã sinh viên                     ┃\n");
-        printf("┃ ▷  6.    Cấp email                            ┃\n");
-        printf("┃ ▷  7.    In danh sách sinh viên ra màn hình   ┃\n");
-        printf("┃ ▷  0.    Thoát                                ┃\n");
-        printf("╹━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╹\n\n");
+        printf("    ╔═════════════════════════════════════════════════╗\n");
+        printf("    ║            QUẢN LÍ DANH SÁCH SINH VIÊN          ║\n");
+        printf("    ╠═════════════════════════════════════════════════╣\n");
+        printf("    ║ ▷  1.    Thêm sinh viên                         ║\n");
+        printf("    ║ ▷  2.    Sắp xếp danh sách                      ║\n");
+        printf("    ║ ▷  3.    Xóa sinh viên                          ║\n");
+        printf("    ║ ▷  4.    Tìm sinh viên                          ║\n");
+        printf("    ║ ▷  5.    Cấp mã sinh viên                       ║\n");
+        printf("    ║ ▷  6.    Cấp email                              ║\n");
+        printf("    ║ ▷  7.    In danh sách sinh viên ra màn hình     ║\n");
+        printf("    ║ ▷  0.    Thoát                                  ║\n");
+        printf("    ╚═════════════════════════════════════════════════╝\n\n");
+
     	printf("Nhập yêu cầu của bạn: ");
         scanf("%d",&key);
         getchar();
@@ -502,6 +507,7 @@ void MainMenu(SV list[])
 
 int RunProgram()
 {
+    int i;
 
     NhapBanDau();
     MainMenu(list);
