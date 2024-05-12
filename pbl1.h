@@ -213,31 +213,21 @@ void PrintToFile(FILE *file, STUDENT StudentList[], int StdCount)
                                 StudentList[i].Gender, StudentList[i].Address);
 }
 
-void ListClass()
-{
-    if (strcmp(FaculityCode,"101") == 0)
-    {
-        printf("%sC1A\n", SchoolYear);
-        printf("%sC1B\n", SchoolYear);
-        printf("%sC1C\n", SchoolYear);
-        printf("%sCDT1\n", SchoolYear);
-        printf("%sCDT2\n", SchoolYear);
-        printf("%sCDT3\n", SchoolYear);
-        printf("%sCDT4\n", SchoolYear);
-        printf("%sCKHK\n", SchoolYear);   
-    }
-    else if (strcmp(FaculityCode, "102") == 0)
-    {
-        printf("%sT_DT1\n", SchoolYear);
-        printf("%sT_DT2\n", SchoolYear);
-        printf("%sT_DT3\n", SchoolYear);
-        printf("%sT_DT4\n", SchoolYear);
-        printf("%sT_Nhat1\n", SchoolYear);
-        printf("%sT_Nhat2\n", SchoolYear);
-        printf("%sT_KHDL1\n", SchoolYear);
-        printf("%sT_KHDL2\n", SchoolYear);
-    }
-}
+// void ListClass()
+// {
+//     if (strcmp(FaculityCode,"101") == 0)
+//     {
+//         printf("%sC1...\n", SchoolYear);
+//         printf("%sCDT...\n", SchoolYear);
+//         printf("%sCKHK\n", SchoolYear);   
+//     }
+//     else if (strcmp(FaculityCode, "102") == 0)
+//     {
+//         printf("%sT_DT...\n", SchoolYear);
+//         printf("%sT_Nhat...\n", SchoolYear);
+//         printf("%sT_KHDL...\n", SchoolYear);
+//     }
+// }
 
 void Input_Student(STUDENT *student)
 {
@@ -271,7 +261,7 @@ void Add_Student()
 {
     int i = 0;
     char choice;
-    ListClass();
+    // ListClass();
     printf("Nhập tên lớp cần thêm sinh viên: ");
     fgets(ClassName, sizeof(ClassName), stdin);
     RemoveEnter(ClassName);
@@ -680,118 +670,218 @@ void PrintToScreen()
 
 void Start()
 {
-    printf("\n17: Khóa 2017\n");
-    printf("18: Khóa 2018\n");
-    printf("19: Khóa 2019\n");
-    printf("20: Khóa 2020\n");
-    printf("21: Khóa 2021\n");
-    printf("22: Khóa 2022\n");
-    printf("23: Khóa 2023\n");
+    do
+    {
+        printf("\n17: Khóa 2017\n");
+        printf("18: Khóa 2018\n");
+        printf("19: Khóa 2019\n");
+        printf("20: Khóa 2020\n");
+        printf("21: Khóa 2021\n");
+        printf("22: Khóa 2022\n");
+        printf("23: Khóa 2023\n");
         
-    printf("\nNhập mã khóa: ");
-    fgets(SchoolYear, sizeof(SchoolYear), stdin);
-    RemoveEnter(SchoolYear);
+        printf("\nNhập mã khóa: ");
+        fgets(SchoolYear, sizeof(SchoolYear), stdin);
+        RemoveEnter(SchoolYear);
 
-    printf("\n101: Khoa Cơ khí \n");
-    printf("102: Khoa Công nghệ thông tin \n");
-    printf("103: Khoa Cơ khí giao thông \n");
-    printf("104: Khoa CN Nhiệt - Điện lạnh \n");
-    printf("105: Khoa Điện \n");
-    printf("106: Khoa Điện tử viễn thông \n");
-    printf("107: Khoa Hóa \n");
-    printf("109: Khoa Xây dựng Cầu - Đường\n");
-    printf("110: Khoa Xây dựng Dân dụng - Công nghiệp \n");
-    printf("111: Khoa Xây dựng Công trình thủy \n");
-    printf("117: Khoa Môi trường \n");
-    printf("118: Khoa Quản lí dự án \n");
-    printf("121: Khoa Kiến trúc \n");
-    printf("123: Khoa Công nghệ tiên tiến \n\n");
+        if (strcmp(SchoolYear, "17") != 0 && strcmp(SchoolYear, "18") != 0 && strcmp(SchoolYear, "19") != 0 &&
+            strcmp(SchoolYear, "20") != 0 && strcmp(SchoolYear, "21") != 0 && strcmp(SchoolYear, "22") != 0 &&
+                strcmp(SchoolYear, "23") != 0)
+            printf("Vui lòng nhập lại: \n");
+    } while (strcmp(SchoolYear, "17") != 0 && strcmp(SchoolYear, "18") != 0 && strcmp(SchoolYear, "19") != 0 &&
+            strcmp(SchoolYear, "20") != 0 && strcmp(SchoolYear, "21") != 0 && strcmp(SchoolYear, "22") != 0 &&
+                strcmp(SchoolYear, "23") != 0);
 
-    printf("Nhập mã khoa: ");
-    fgets(FaculityCode, sizeof(FaculityCode), stdin);
-    RemoveEnter(FaculityCode);
+    do
+    {
+        printf("\n101: Khoa Cơ khí \n");
+        printf("102: Khoa Công nghệ thông tin \n");
+        printf("103: Khoa Cơ khí giao thông \n");
+        printf("104: Khoa CN Nhiệt - Điện lạnh \n");
+        printf("105: Khoa Điện \n");
+        printf("106: Khoa Điện tử viễn thông \n");
+        printf("107: Khoa Hóa \n");
+        printf("109: Khoa Xây dựng Cầu - Đường\n");
+        printf("110: Khoa Xây dựng Dân dụng - Công nghiệp \n");
+        printf("111: Khoa Xây dựng Công trình thủy \n");
+        printf("117: Khoa Môi trường \n");
+        printf("118: Khoa Quản lí dự án \n");
+        printf("121: Khoa Kiến trúc \n");
+        printf("123: Khoa Công nghệ tiên tiến \n\n");
+
+        printf("Nhập mã khoa: ");
+        fgets(FaculityCode, sizeof(FaculityCode), stdin);
+        RemoveEnter(FaculityCode);
+
+        if (strcmp(FaculityCode, "101") != 0 && strcmp(FaculityCode, "102") != 0 && strcmp(FaculityCode, "103") != 0 &&
+            strcmp(FaculityCode, "104") != 0 && strcmp(FaculityCode, "105") != 0 && strcmp(FaculityCode, "106") != 0 &&
+                strcmp(FaculityCode, "107") != 0 && strcmp(FaculityCode, "109") != 0 && strcmp(FaculityCode, "110") != 0 &&
+                    strcmp(FaculityCode, "111") != 0 && strcmp(FaculityCode, "117") != 0 && strcmp(FaculityCode, "118") != 0 &&
+                        strcmp(FaculityCode, "121") != 0 && strcmp(FaculityCode, "123") != 0)
+            printf("Vui lòng nhập lại!!");
+    } while (strcmp(FaculityCode, "101") != 0 && strcmp(FaculityCode, "102") != 0 && strcmp(FaculityCode, "103") != 0 &&
+            strcmp(FaculityCode, "104") != 0 && strcmp(FaculityCode, "105") != 0 && strcmp(FaculityCode, "106") != 0 &&
+                strcmp(FaculityCode, "107") != 0 && strcmp(FaculityCode, "109") != 0 && strcmp(FaculityCode, "110") != 0 &&
+                    strcmp(FaculityCode, "111") != 0 && strcmp(FaculityCode, "117") != 0 && strcmp(FaculityCode, "118") != 0 &&
+                        strcmp(FaculityCode, "121") != 0 && strcmp(FaculityCode, "123") != 0);
 }
 
 bool Login()
 {
     USER user[MAX_SIZE];
-    int i = 0, j = 0;
+    int i = 0, j = 0, count = 0;
     char username[Max_Username];
     char password[Max_Password];
     char ch;
     bool found = false;
 
-    FILE *f = fopen("user.txt", "r");
-    if (f == NULL)
+    FILE *file = fopen("user.txt", "r");
+    if (file == NULL)
     {
         printf("Vui lòng tạo tài khoản trước!!!\n");
         return false;
     }
 
-    while (fscanf(f, "%s %s", user[i].Username, user[i].Password) != EOF);
+    char line[100];
+    while (fgets(line, sizeof(line), file))
     {
+        sscanf(line, "%[^:]:%[^\n]", user[i].Username, user[i].Password);
         i++;
     }
+    printf("════ TRANG ĐĂNG NHẬP ════\n\n");
+    while (true) 
+    {
+        j = 0;
+        printf("Tên đăng nhập : ");
+        fgets(username, sizeof(username), stdin);
+        RemoveEnter(username);
 
-    printf("Username: ");
+        printf("Mật khẩu      : ");
+        while (j < Max_Password)    
+        {
+            ch = getch(); 
+            if (ch == '\r' || ch == '\n')  
+                break;
+            else if (ch == '\b') 
+            {
+                if (j > 0)
+                {
+                    j--;
+                    printf("\b \b"); 
+                }
+                else
+                    printf("\b");
+            }
+            else  
+            {
+                password[j] = ch;
+                j++;
+                printf("*"); 
+            }
+            password[j] = '\0';
+        }
+
+        for (j = 0; j < i; j++)
+        {
+            if (strcmp(user[j].Username, username) == 0 && strcmp(user[j].Password, password) == 0)
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if (found == true)
+        {
+            printf("\n\nĐăng nhập thành công!!!\n\n");
+            Sleep(500);
+            for (int i = 0; i < 5; i++)
+            {
+                printf("\rLoading");
+                for (int j = 0; j < 3; j++)
+                {
+                    printf(".");
+                    Sleep(200);
+                }
+                printf("\b \b \b");
+                Sleep(150);
+            }
+            system("cls");
+            return true;
+        }  
+        else
+        {
+            system("cls");
+            if (count < 3)
+            {
+                printf("\n\nSai tài khoản hoặc mật khẩu, vui lòng kiểm tra lại!!!\n");
+                count++;
+            }
+        }
+        if (count == 3)
+            break;
+    }
+    printf("\nSai quá nhiều lần, thoát chương trình!!!\n");
+    return false;
+}
+
+void Register()
+{
+    char username[Max_Username];
+    char password[Max_Password];
+    printf("═══ TRANG ĐĂNG KÝ ═══\n");
+    printf("Tên đăng nhập: ");
     fgets(username, sizeof(username), stdin);
     RemoveEnter(username);
-
-    printf("Passwword: ");
-    while (1) {
-        ch = getch(); 
-        if (ch == '\r') {
-            password[j] = '\0'; 
-            break;
-        }
-        else if (ch == '\b' && j > 0) {
-            j--;
-            printf("\b \b"); 
-        }
-        else  {
-            password[j] = ch;
-            j++;
-            printf("*"); 
-        }
-    }
-
-    for (int j = 0; j < i; j++)
-    {
-        if (strcmp(user[j].Username, username) == 0 && strcmp(user[j].Password, password) == 0)
+    FILE *file = fopen("user.txt", "a");
+    fprintf(file, "%s:", username);
+    printf("Mật khẩu: ");
+    char ch;
+    int j = 0;
+    while (j < Max_Password)    
         {
-            found = true;
-            break;
-        }
-    }
-
-    if (found == true)
-    {
-        printf("\n\nĐăng nhập thành công!!!\n\n");
-        Sleep(500);
-        for (int i = 0; i < 5; i++)
-        {
-            printf("\rLoading");
-            for (int j = 0; j < 3; j++)
+            ch = getch(); 
+            if (ch == '\r' || ch == '\n')  
+                break;
+            else if (ch == '\b') 
             {
-                Sleep(200);
-                printf(".");
+                if (j > 0)
+                {
+                    j--;
+                    printf("\b \b"); 
+                }
+                else
+                    printf("\b");
             }
-            Sleep(100);
+            else  
+            {
+                password[j] = ch;
+                j++;
+                printf("*"); 
+            }
+            password[j] = '\0';
         }
-        system("cls");
-        return true;
-    }
-    else
+    fprintf(file, "%s\n", password);
+    fclose(file);
+    printf("\n\nĐăng kí thành công!!!\n\n");
+    Sleep(500);
+    for (int i = 0; i < 5; i++)
     {
-        printf("\n\nSai tài khoản hoặc mật khẩu, vui lòng kiểm tra lại!!!\n");
-        return false;
+        printf("\rLoading");
+        for (int j = 0; j < 3; j++)
+        {
+            printf(".");
+            Sleep(200);
+        }
+        printf("\b \b \b");
+        Sleep(150);
     }
+    system("cls");
 }
 
 void MENU()
 {
     bool nhap = false;
-    int key;
+    char key;
     do
     	{
             printf("\n\n");
@@ -809,59 +899,59 @@ void MENU()
             printf("    ║ ➢  0.    Thoát                                  ║\n");
             printf("    ╚═════════════════════════════════════════════════╝\n\n");
     	    printf("Nhập yêu cầu của bạn: ");
-            scanf("%d",&key);
+            scanf("%c",&key);
             getchar();
             switch (key)
             {
-                case 1:
+                case '1':
                     Add_Student();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case 2:
+                case '2':
                     SortStudent();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case 3:
+                case '3':
                     RemoveStudent();
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     nhap = true;
                     break;
-                case 4:
+                case '4':
                     FindStudent();
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     nhap = true;
                     break;
-                case 5:
+                case '5':
                     InsertStudentID();
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     nhap = true;
                     break;
-                case 6: 
+                case '6': 
                     InsertEmail();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case 7:
+                case '7':
                     PrintToFileReport();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case 8:
+                case '8':
                     PrintToScreen();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case 0:
+                case '0':
                     printf("\nBạn đã thoát khỏi chương trình thành công!!!");
                     nhap = false;
                     break;
@@ -878,11 +968,31 @@ void MENU()
 void RunProgram()
 {
     SetConsoleOutputCP(65001);
-    if (Login() == true)
+    int choice;
+    printf("1. Đăng nhập\n");
+    printf("2. Đăng kí tài khoản\n");
+    printf("3. Thoát chương trình\n");
+    printf("\nNhập lựa chọn của bạn: ");
+    scanf("%d",&choice);
+    getchar();
+    switch (choice)
     {
+    case 1:
+        system("cls");
+        if (Login() == true)
+        {
         Start();
         MENU();
-    }
-    else
+        }
+        break;
+    case 2:
+        system("cls");
+        Register();
+        Start();
+        MENU();
+        break;
+    case 3:
+        printf("Thoát chương trình thành công!\n");
         return;
+    }
 }
