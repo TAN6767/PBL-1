@@ -15,6 +15,8 @@
 #define Max_Address 30
 #define Max_FaculityCode 5
 #define Max_SchoolYear 5
+#define Max_ID 20
+#define Max_email 30
 #define Max_Username 30
 #define Max_Password 30
 
@@ -33,11 +35,11 @@ struct Student
     char Birthday[Max_Date];
     char Gender[Max_Gender];
     char Address[Max_Address];
-    char ID[10];
-    char email[25];
+    char ID[Max_ID];
+    char email[Max_email];
 };
 typedef struct Student STUDENT;
-STUDENT StudentList[MAX_SIZE];
+STUDENT Student[MAX_SIZE];
 
 char FaculityCode[Max_FaculityCode];
 char SchoolYear[Max_SchoolYear];
@@ -47,6 +49,32 @@ char ClassFindName[MAX_SIZE];
 
 int StdCount = 0;
 char checksort;
+
+void RemoveEnter(char x[]);
+void MakeNULL(char x[]);
+char *rTrim(char x[]);
+char *lTrim(char x[]);
+char *trim(char x[]);
+char *NameStr(char x[]);
+void CreateClass(char filename[]);
+void SwapStudent(STUDENT *student1, STUDENT *student2);
+void BubbleSort(STUDENT Student[], int StdCount);
+void ReadStudentFile(FILE *file, int *StdCount);
+void PrintToFile(FILE *file, STUDENT Student[], int StdCount);
+void Input_Student(STUDENT *student);
+void AddStudent();
+void SortStudent();
+void CreateStudentID();
+void CreateEmail();
+void FindStudent();
+void RemoveStudent();
+void PrintToFileReport();
+void PrintToScreen();
+void Start();
+bool Login();
+bool CheckRegister(char username[]);
+void Register();
+void MENU();
 
 void RemoveEnter(char x[])
 {
@@ -105,7 +133,7 @@ char *NameStr(char x[])
 void CreateClass(char filename[])
 {
     char ClassFile[30];
-    sprintf(ClassFile, "%s_%s_List.dat", SchoolYear, FaculityCode);
+    sprintf(ClassFile, "%s_%s_List.txt", SchoolYear, FaculityCode);
     FILE *file = fopen(ClassFile, "r");
     if (file == NULL)
     {
@@ -144,23 +172,23 @@ void SwapStudent(STUDENT *student1, STUDENT *student2)
     *student2 = student_temp;
 }
 
-void BubbleSort(STUDENT StudentList[], int StdCount)
+void BubbleSort(STUDENT Student[], int StdCount)
 {
     for (int i = 0; i < StdCount - 1; i++)
-        for (int j = i+1; j < StdCount ; j++)
+        for (int j = 0; j < StdCount - i - 1; j++)
         {
-            if (strcmp(StudentList[i].ID, StudentList[j].ID) == 0)
+            if (strcmp(Student[j].ID, Student[j+1].ID) == 0)
             {
-                if (strcmp(StudentList[i].FirstName, StudentList[j].FirstName) == 0)
+                if (strcmp(Student[j].FirstName, Student[j+1].FirstName) == 0)
                 {
-                    if (strcmp(StudentList[i].LastName, StudentList[j].LastName) > 0)
-                        SwapStudent(&StudentList[i], &StudentList[j]);
+                    if (strcmp(Student[j].LastName, Student[j+1].LastName) > 0)
+                        SwapStudent(&Student[j], &Student[j+1]);
                 }
-                else if (strcmp(StudentList[i].FirstName, StudentList[j].FirstName) > 0)
-                    SwapStudent(&StudentList[i], &StudentList[j]);                  
+                else if (strcmp(Student[j].FirstName, Student[j+1].FirstName) > 0)
+                    SwapStudent(&Student[j], &Student[j+1]);                  
             }
-            else if (strcmp(StudentList[i].ID, StudentList[j].ID) > 0)
-                SwapStudent(&StudentList[i], &StudentList[j]); 
+            else if (strcmp(Student[j].ID, Student[j+1].ID) > 0)
+                SwapStudent(&Student[j], &Student[j+1]); 
         }
 }
 
@@ -173,61 +201,45 @@ void ReadStudentFile(FILE *file, int *StdCount)
         char LastName[Max_LastName], FirstName[Max_FirstName], Birthday[Max_Date], Gender[Max_Gender], Address[Max_Address], ID[10], Email[30];
         sscanf(line, "%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^\n]", LastName, FirstName, Birthday, Gender, Address, ID, Email);
 
-        strcpy(StudentList[i].ID, ID);
-        strcpy(StudentList[i].LastName , LastName);
-        strcpy(StudentList[i].FirstName, FirstName);
-        strcpy(StudentList[i].Birthday, Birthday);
-        strcpy(StudentList[i].Gender, Gender);
-        strcpy(StudentList[i].Address, Address);
-        strcpy(StudentList[i].email, Email);
+        strcpy(Student[i].ID, ID);
+        strcpy(Student[i].LastName , LastName);
+        strcpy(Student[i].FirstName, FirstName);
+        strcpy(Student[i].Birthday, Birthday);
+        strcpy(Student[i].Gender, Gender);
+        strcpy(Student[i].Address, Address);
+        strcpy(Student[i].email, Email);
         i++;
     }
     *StdCount = i;
     for (i = 0; i < *StdCount; i++)
-        if (StudentList[i].ID[0] != '1')
-            MakeNULL(StudentList[i].ID);
+        if (Student[i].ID[0] != '1')
+            MakeNULL(Student[i].ID);
     for (i = 0; i < *StdCount; i++)
-        if (StudentList[i].email[0] != '1')
-            MakeNULL(StudentList[i].email);
+        if (Student[i].email[0] != '1')
+            MakeNULL(Student[i].email);
     for (i = *StdCount ; i > 0 ; i--)
-        if (strcmp(StudentList[i].ID, StudentList[i-1].ID) == 0)
-            MakeNULL(StudentList[i].ID);
+        if (strcmp(Student[i].ID, Student[i-1].ID) == 0)
+            MakeNULL(Student[i].ID);
     for (i = *StdCount ; i > 0 ; i-- )
-        if (strcmp(StudentList[i].email, StudentList[i-1].email) == 0)
-            MakeNULL(StudentList[i].email);
+        if (strcmp(Student[i].email, Student[i-1].email) == 0)
+            MakeNULL(Student[i].email);
 }
 
-void PrintToFile(FILE *file, STUDENT StudentList[], int StdCount)
+void PrintToFile(FILE *file, STUDENT Student[], int StdCount)
 {
     for (int i =0 ; i < StdCount; i++)
         {
-            if (StudentList[i].ID[0] != '1')
+            if (Student[i].ID[0] != '1')
                 continue;
             else
-                fprintf(file, "%s:%s:%s:%s:%s:%s:%s\n", StudentList[i].LastName, StudentList[i].FirstName, StudentList[i].Birthday,
-                                StudentList[i].Gender, StudentList[i].Address, StudentList[i].ID, StudentList[i].email);           
+                fprintf(file, "%s:%s:%s:%s:%s:%s:%s\n", Student[i].LastName, Student[i].FirstName, Student[i].Birthday,
+                                Student[i].Gender, Student[i].Address, Student[i].ID, Student[i].email);           
         }
         for (int i = 0; i < StdCount; i++)
-            if (StudentList[i].ID[0] != '1')
-                fprintf(file, "%s:%s:%s:%s:%s::\n", StudentList[i].LastName, StudentList[i].FirstName, StudentList[i].Birthday,
-                                StudentList[i].Gender, StudentList[i].Address);
+            if (Student[i].ID[0] != '1')
+                fprintf(file, "%s:%s:%s:%s:%s::\n", Student[i].LastName, Student[i].FirstName, Student[i].Birthday,
+                                Student[i].Gender, Student[i].Address);
 }
-
-// void ListClass()
-// {
-//     if (strcmp(FaculityCode,"101") == 0)
-//     {
-//         printf("%sC1...\n", SchoolYear);
-//         printf("%sCDT...\n", SchoolYear);
-//         printf("%sCKHK\n", SchoolYear);   
-//     }
-//     else if (strcmp(FaculityCode, "102") == 0)
-//     {
-//         printf("%sT_DT...\n", SchoolYear);
-//         printf("%sT_Nhat...\n", SchoolYear);
-//         printf("%sT_KHDL...\n", SchoolYear);
-//     }
-// }
 
 void Input_Student(STUDENT *student)
 {
@@ -261,12 +273,11 @@ void Add_Student()
 {
     int i = 0;
     char choice;
-    // ListClass();
     printf("Nhập tên lớp cần thêm sinh viên: ");
     fgets(ClassName, sizeof(ClassName), stdin);
     RemoveEnter(ClassName);
 
-    sprintf(filename, "%s_%s.dat", FaculityCode, ClassName);
+    sprintf(filename, "%s_%s.txt", FaculityCode, ClassName);
     CreateClass(filename);
 
     FILE *file = fopen(filename, "r");
@@ -301,45 +312,87 @@ void Add_Student()
         fprintf(file, "%d\n", StdCount);
         fprintf(file,"0\n");
         
-        for (int i = 0; i < StdCount; i++)
-            fprintf(file, "%s:%s:%s:%s:%s::\n", StudentList[i].LastName, StudentList[i].FirstName, StudentList[i].Birthday,
-                                StudentList[i].Gender, StudentList[i].Address);
+        for (i = 0; i < StdCount; i++)
+            fprintf(file, "%s:%s:%s:%s:%s::\n", Student[i].LastName, Student[i].FirstName, Student[i].Birthday,
+                                Student[i].Gender, Student[i].Address);
         fclose(file);
     }
     else
     {
-        fclose(file);       
-        file = fopen(filename,"a");
-        do
-        {
-            STUDENT newstudent;
-
-            printf("\nNhập sinh viên thứ %d: \n",i+1);
-            Input_Student(&newstudent);
-            fprintf(file, "%s:%s:%s:%s:%s::\n", newstudent.LastName, newstudent.FirstName, newstudent.Birthday,
-                                newstudent.Gender, newstudent.Address);
-            i++;
-            do 
-            {
-                printf("Bạn có muốn tiếp tục không [Y/N] ? ");
-                scanf("%c", &choice);
-                getchar();
-            } while (choice != 'n' && choice != 'N' && choice != 'y' && choice != 'Y');
-        } while (choice != 'N' && choice != 'n');
-
-        fclose(file);
-        file = fopen(filename, "r");
         fscanf(file, "%d%*c", &StdCount);
         StdCount = 0;
         fscanf(file, "%c%*c", &checksort);
-        ReadStudentFile(file, &StdCount);
-        fclose(file);
+        if (checksort == '0')
+        {
+            fclose(file);
+            file = fopen(filename,"a");
+            do
+            {
+                STUDENT newstudent;
 
-        file = fopen(filename, "w");
-        fprintf(file, "%d\n", StdCount);
-        fprintf(file,"0\n");
-        PrintToFile(file, StudentList, StdCount);
-        fclose(file);
+                printf("\nNhập sinh viên thứ %d: \n",i+1);
+                Input_Student(&newstudent);
+                fprintf(file, "%s:%s:%s:%s:%s::\n", newstudent.LastName, newstudent.FirstName, newstudent.Birthday,
+                                    newstudent.Gender, newstudent.Address);
+                i++;
+                do 
+                {
+                    printf("Bạn có muốn tiếp tục không [Y/N] ? ");
+                    scanf("%c", &choice);
+                    getchar();
+                } while (choice != 'n' && choice != 'N' && choice != 'y' && choice != 'Y');
+            } while (choice != 'N' && choice != 'n');
+
+            fclose(file);
+            file = fopen(filename, "r");
+            fscanf(file, "%d%*c", &StdCount);
+            StdCount = 0;
+            fscanf(file, "%c%*c", &checksort);
+            ReadStudentFile(file, &StdCount);
+            fclose(file);
+
+            file = fopen(filename, "w");
+            fprintf(file, "%d\n", StdCount);
+            fprintf(file,"0\n");
+            PrintToFile(file, Student, StdCount);
+            fclose(file);
+        }
+        else
+        {
+             fclose(file);
+            file = fopen(filename,"a");
+            do
+            {
+                STUDENT newstudent;
+
+                printf("\nNhập sinh viên thứ %d: \n",i+1);
+                Input_Student(&newstudent);
+                fprintf(file, "%s:%s:%s:%s:%s::\n", newstudent.LastName, newstudent.FirstName, newstudent.Birthday,
+                                    newstudent.Gender, newstudent.Address);
+                i++;
+                do 
+                {
+                    printf("Bạn có muốn tiếp tục không [Y/N] ? ");
+                    scanf("%c", &choice);
+                    getchar();
+                } while (choice != 'n' && choice != 'N' && choice != 'y' && choice != 'Y');
+            } while (choice != 'N' && choice != 'n');
+
+            fclose(file);
+            file = fopen(filename, "r");
+            fscanf(file, "%d%*c", &StdCount);
+            StdCount = 0;
+            fscanf(file, "%c%*c", &checksort);
+            ReadStudentFile(file, &StdCount);
+            fclose(file);
+            BubbleSort(Student,StdCount);
+
+            file = fopen(filename, "w");
+            fprintf(file, "%d\n", StdCount);
+            fprintf(file,"1\n");
+            PrintToFile(file, Student, StdCount);
+            fclose(file);
+        }
     }
 }
 
@@ -348,7 +401,7 @@ void SortStudent()
     printf("Nhập tên lớp cần sắp xếp: ");
     fgets(ClassName, sizeof(ClassName), stdin);
     RemoveEnter(ClassName);
-    sprintf(filename, "%s_%s.dat", FaculityCode, ClassName);
+    sprintf(filename, "%s_%s.txt", FaculityCode, ClassName);
 
     FILE *file = fopen(filename, "r");
 
@@ -372,21 +425,21 @@ void SortStudent()
         ReadStudentFile(file, &StdCount);
         fclose(file);
         
-        BubbleSort(StudentList, StdCount);
+        BubbleSort(Student, StdCount);
 
         file = fopen(filename, "w");
         fprintf(file, "%d\n", StdCount);
         fprintf(file,"1\n");  
-        PrintToFile(file, StudentList, StdCount);
+        PrintToFile(file, Student, StdCount);
         fclose(file);
     }
 }
 
-void InsertStudentID()
+void CreateStudentID()
 {
     int count;
     char fileID[20];
-    sprintf(fileID, "id_%s_%s.dat", SchoolYear, FaculityCode);
+    sprintf(fileID, "id_%s_%s.txt", SchoolYear, FaculityCode);
     FILE *ID = fopen(fileID,"r");
     if (ID == NULL)
     {
@@ -402,12 +455,12 @@ void InsertStudentID()
     fgets(ClassName, sizeof(ClassName), stdin);
     RemoveEnter(ClassName);
 
-    sprintf(filename, "%s_%s.dat", FaculityCode, ClassName);
+    sprintf(filename, "%s_%s.txt", FaculityCode, ClassName);
 
     FILE *file = fopen(filename, "r");
     if (file == NULL)
     {
-        printf("Lớp %s không tồn tại!!!", ClassName);
+        printf("Lớp %s không tồn tại!!!\n", ClassName);
         return;
     }
     else 
@@ -424,11 +477,11 @@ void InsertStudentID()
         fclose(file);
         for (int i = 0; i < StdCount ;i ++)
         {
-            if (StudentList[i].ID[0] == '1')
+            if (Student[i].ID[0] == '1')
                 continue;
             char tempID[20];
             sprintf(tempID, "%s%s%04d", FaculityCode, SchoolYear, ++count);
-            strcpy(StudentList[i].ID, tempID);
+            strcpy(Student[i].ID, tempID);
         }
 
         file = fopen(fileID,"w");
@@ -438,18 +491,19 @@ void InsertStudentID()
         file = fopen(filename,"w");
         fprintf(file, "%d\n", StdCount);
         fprintf(file,"1\n");
-        PrintToFile(file, StudentList, StdCount);
+        PrintToFile(file, Student, StdCount);
         fclose(file);
+        printf("Cấp mã sinh viên cho lớp %s thành công!\n", ClassName);
     }
 }
 
-void InsertEmail()
+void CreateEmail()
 {
     printf("Nhập tên lớp cần cấp email: ");
     fgets(ClassName, sizeof(ClassName), stdin);
     RemoveEnter(ClassName);
 
-    sprintf(filename, "%s_%s.dat", FaculityCode, ClassName);
+    sprintf(filename, "%s_%s.txt", FaculityCode, ClassName);
 
     FILE *file = fopen(filename, "r");
     if (file == NULL)
@@ -464,33 +518,32 @@ void InsertEmail()
         fscanf(file, "%c%*c", &checksort);
         ReadStudentFile(file, &StdCount);
         fclose(file);
-        bool InsertID = true;
+        bool CreateID = true;
         for (int i = 0; i < StdCount; i++)
         {
-            if (StudentList[i].ID[0] != '1')
+            if (Student[i].ID[0] != '1')
             {
-                InsertID = false;
+                CreateID = false;
                 break;
             }
         }
-
-        if (!InsertID)
+        if (!CreateID)
         {
             printf("Vui lòng cấp mã số sinh viên cho tất cả sinh viên trong lớp %s trước khi cấp email!!!\n",ClassName);
             return;
         }
-
         for (int i = 0; i < StdCount; i++)
         {
-            if (StudentList[i].email[1] == '1')
+            if (Student[i].email[1] == '1')
                 continue;
-            strcpy(StudentList[i].email, StudentList[i].ID);
-            strcat(StudentList[i].email,"@sv.dut.udn.vn");
+            strcpy(Student[i].email, Student[i].ID);
+            strcat(Student[i].email,"@sv.dut.udn.vn");
         }
+        printf("Cấp email cho lớp %s thành công!\n", ClassName);
         file = fopen(filename,"w");
         fprintf(file, "%d\n", StdCount);
         fprintf(file,"1\n");
-        PrintToFile(file, StudentList, StdCount);
+        PrintToFile(file, Student, StdCount);
         fclose(file);
     }
 }
@@ -505,7 +558,7 @@ void FindStudent()
     char line[MAX_SIZE], ClassFile[MAX_SIZE];
     bool found = false;
     
-    sprintf(ClassFile, "%s_%s_List.dat", SchoolYear, FaculityCode);
+    sprintf(ClassFile, "%s_%s_List.txt", SchoolYear, FaculityCode);
 
     FILE *file = fopen(ClassFile, "r");
     while (fgets(line, sizeof(line), file))
@@ -520,14 +573,14 @@ void FindStudent()
         ReadStudentFile(f, &StdCount);
         for (int i = 0; i < StdCount; i++)
         {
-            if (strcmp(StudentList[i].ID, ID) == 0)
+            if (strcmp(Student[i].ID, ID) == 0)
             {
                 found = true;
                 printf("Thông tin SV có ID %s:\n",ID);
-                printf("Họ và tên: %s %s\n", StudentList[i].LastName, StudentList[i].FirstName);
-                printf("Ngày sinh: %s\n",StudentList[i].Birthday);
-                printf("Giới tính: %s\n",StudentList[i].Gender);
-                printf("Địa chỉ  : %s\n",StudentList[i].Address);
+                printf("Họ và tên: %s %s\n", Student[i].LastName, Student[i].FirstName);
+                printf("Ngày sinh: %s\n",Student[i].Birthday);
+                printf("Giới tính: %s\n",Student[i].Gender);
+                printf("Địa chỉ  : %s\n",Student[i].Address);
                 break;
             }
         }
@@ -551,7 +604,7 @@ void RemoveStudent()
     char line[MAX_SIZE], ClassFile[MAX_SIZE];
     bool found = false;
     
-    sprintf(ClassFile, "%s_%s_List.dat", SchoolYear, FaculityCode);
+    sprintf(ClassFile, "%s_%s_List.txt", SchoolYear, FaculityCode);
 
     FILE *file = fopen(ClassFile, "r");
     while (fgets(line, sizeof(line), file))
@@ -566,11 +619,11 @@ void RemoveStudent()
         ReadStudentFile(f, &StdCount);
         for (int i = 0; i < StdCount; i++)
         {
-            if (strcmp(StudentList[i].ID, ID) == 0)
+            if (strcmp(Student[i].ID, ID) == 0)
             {
                 found = true;
                 for (int j = i; j < StdCount -1; j++)
-                    StudentList[j] = StudentList[j+1];
+                    Student[j] = Student[j+1];
                 StdCount--;
                 break;
             }
@@ -578,13 +631,14 @@ void RemoveStudent()
         fclose(f);
         if (found == true)
         {
+            printf("Xóa sinh viên có ID %s thành công!\n", ID);
             f = fopen(ClassFindName, "w");
             fprintf(f, "%d\n", StdCount);
             fprintf(f, "%c\n", checksort);
             for (int i = 0; i < StdCount ; i++)
             {
-                fprintf(f, "%s:%s:%s:%s:%s:%s:%s\n", StudentList[i].LastName, StudentList[i].FirstName, StudentList[i].Birthday,
-                                StudentList[i].Gender, StudentList[i].Address, StudentList[i].ID, StudentList[i].email);
+                fprintf(f, "%s:%s:%s:%s:%s:%s:%s\n", Student[i].LastName, Student[i].FirstName, Student[i].Birthday,
+                                Student[i].Gender, Student[i].Address, Student[i].ID, Student[i].email);
             }
             fclose(f);
             break;
@@ -601,7 +655,7 @@ void PrintToFileReport()
     fgets(ClassName, sizeof(ClassName), stdin);
     RemoveEnter(ClassName);
    
-    sprintf(filename, "%s_%s.dat", FaculityCode, ClassName);
+    sprintf(filename, "%s_%s.txt", FaculityCode, ClassName);
 
     FILE *file = fopen(filename, "r");
 
@@ -616,7 +670,7 @@ void PrintToFileReport()
     ReadStudentFile(file, &StdCount);
     fclose(file);
 
-    sprintf(filename, "%s_%s-report.dat", FaculityCode, ClassName);
+    sprintf(filename, "%s_%s-report.txt", FaculityCode, ClassName);
 
     file = fopen(filename, "w");
 
@@ -625,12 +679,13 @@ void PrintToFileReport()
 
     for (int i = 0; i < StdCount; i++)
     {
-        strcpy(StudentList[i].FullName, StudentList[i].LastName);
-        strcat(StudentList[i].FullName, " ");
-        strcat(StudentList[i].FullName, StudentList[i].FirstName);
-        fprintf(file, " %-2d |    %-12s | %-30s |  %-10s |    %-3s    | %-25s | %-20s\n", i+1, StudentList[i].ID, StudentList[i].FullName, StudentList[i].Birthday, 
-            StudentList[i].Gender, StudentList[i].Address, StudentList[i].email);
+        strcpy(Student[i].FullName, Student[i].LastName);
+        strcat(Student[i].FullName, " ");
+        strcat(Student[i].FullName, Student[i].FirstName);
+        fprintf(file, " %-2d |    %-12s | %-30s |  %-10s |    %-3s    | %-25s | %-20s\n", i+1, Student[i].ID, Student[i].FullName, Student[i].Birthday, 
+            Student[i].Gender, Student[i].Address, Student[i].email);
     }
+    printf("In sinh viên lớp %s ra file thành công!\n", ClassName);
     fclose(file);
 }
 
@@ -640,7 +695,7 @@ void PrintToScreen()
     fgets(ClassName, sizeof(ClassName), stdin);
     RemoveEnter(ClassName);
 
-    sprintf(filename, "%s_%s.dat", FaculityCode, ClassName);
+    sprintf(filename, "%s_%s.txt", FaculityCode, ClassName);
 
     FILE *file = fopen(filename, "r");
 
@@ -660,11 +715,11 @@ void PrintToScreen()
 
     for (int i = 0; i < StdCount; i++)
     {
-        strcpy(StudentList[i].FullName, StudentList[i].LastName);
-        strcat(StudentList[i].FullName, " ");
-        strcat(StudentList[i].FullName, StudentList[i].FirstName);
-        printf(" %-2d |    %-12s | %-30s |  %-10s |    %-3s    | %-25s | %-20s\n", i+1, StudentList[i].ID, StudentList[i].FullName, StudentList[i].Birthday, 
-            StudentList[i].Gender, StudentList[i].Address, StudentList[i].email);
+        strcpy(Student[i].FullName, Student[i].LastName);
+        strcat(Student[i].FullName, " ");
+        strcat(Student[i].FullName, Student[i].FirstName);
+        printf(" %-2d |    %-12s | %-30s |  %-10s |    %-3s    | %-25s | %-20s\n", i+1, Student[i].ID, Student[i].FullName, Student[i].Birthday, 
+            Student[i].Gender, Student[i].Address, Student[i].email);
     }
 }
 
@@ -748,7 +803,7 @@ bool Login()
         sscanf(line, "%[^:]:%[^\n]", user[i].Username, user[i].Password);
         i++;
     }
-    printf("════ TRANG ĐĂNG NHẬP ════\n\n");
+    printf("\n\n════ TRANG ĐĂNG NHẬP ════\n\n");
     while (true) 
     {
         j = 0;
@@ -770,7 +825,7 @@ bool Login()
                     printf("\b \b"); 
                 }
                 else
-                    printf("\b");
+                    printf(" \b");
             }
             else  
             {
@@ -794,16 +849,12 @@ bool Login()
         {
             printf("\n\nĐăng nhập thành công!!!\n\n");
             Sleep(500);
-            for (int i = 0; i < 5; i++)
+            char character[] = {'\\', '|', '/', '-'};
+            char dots[4][5] = {"   ", ".  ", ".. ", "..."};
+            for (int i = 0; i <= 50; i++)
             {
-                printf("\rLoading");
-                for (int j = 0; j < 3; j++)
-                {
-                    printf(".");
-                    Sleep(200);
-                }
-                printf("\b \b \b");
-                Sleep(150);
+                printf("\r%c Loading%s", character[i % 4], dots[i % 4]);
+                Sleep(70);
             }
             system("cls");
             return true;
@@ -824,14 +875,46 @@ bool Login()
     return false;
 }
 
+bool CheckRegister(char username[])
+{
+    if ((int) strlen(username) < 5)
+    {
+        printf("Tên đăng nhập không hợp lệ!!!\n");
+        return false;
+    }
+    USER user[MAX_SIZE];
+    FILE *f = fopen("user.txt", "r");
+    char line[100];
+    int i = 0;
+    while (fgets(line, sizeof(line), f))
+    {
+        sscanf(line, "%[^:]:%[^\n]", user[i].Username, user[i].Password);
+        i++;
+    }
+    for (int j = 0; j < i; j++)
+    {
+        if (strcmp(user[j].Username, username) == 0)
+        {
+            printf("Tài khoản đã tồn tại!!!\n");
+            fclose(f);
+            return false;
+        }
+    }
+    fclose(f);
+    return true;
+}
+
 void Register()
 {
     char username[Max_Username];
     char password[Max_Password];
-    printf("═══ TRANG ĐĂNG KÝ ═══\n");
-    printf("Tên đăng nhập: ");
-    fgets(username, sizeof(username), stdin);
-    RemoveEnter(username);
+    do
+    {
+        printf("\n\n═══ TRANG ĐĂNG KÝ ═══\n\n");
+        printf("Tên đăng nhập: ");
+        fgets(username, sizeof(username), stdin);
+        RemoveEnter(username);
+    } while (CheckRegister(username) == false);
     FILE *file = fopen("user.txt", "a");
     fprintf(file, "%s:", username);
     printf("Mật khẩu: ");
@@ -864,16 +947,12 @@ void Register()
     fclose(file);
     printf("\n\nĐăng kí thành công!!!\n\n");
     Sleep(500);
-    for (int i = 0; i < 5; i++)
+    char character[] = {'\\', '|', '/', '-'};
+    char dots[4][5] = {"   ", ".  ", ".. ", "..."};
+    for (int i = 0; i <= 50; i++)
     {
-        printf("\rLoading");
-        for (int j = 0; j < 3; j++)
-        {
-            printf(".");
-            Sleep(200);
-        }
-        printf("\b \b \b");
-        Sleep(150);
+        printf("\r%c Loading%s", character[i % 4], dots[i % 4]);
+        Sleep(70);
     }
     system("cls");
 }
@@ -881,9 +960,10 @@ void Register()
 void MENU()
 {
     bool nhap = false;
-    char key;
+    int key;
     do
     	{
+            system("cls");
             printf("\n\n");
             printf("    ╔═════════════════════════════════════════════════╗\n");
             printf("    ║            QUẢN LÍ DANH SÁCH SINH VIÊN          ║\n");
@@ -899,59 +979,67 @@ void MENU()
             printf("    ║ ➢  0.    Thoát                                  ║\n");
             printf("    ╚═════════════════════════════════════════════════╝\n\n");
     	    printf("Nhập yêu cầu của bạn: ");
-            scanf("%c",&key);
+            scanf("%d",&key);
             getchar();
             switch (key)
             {
-                case '1':
+                case 1:
+                    system("cls");
                     Add_Student();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case '2':
+                case 2:
+                    system("cls");
                     SortStudent();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case '3':
+                case 3:
+                    system("cls");
                     RemoveStudent();
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     nhap = true;
                     break;
-                case '4':
+                case 4:
+                    system("cls");
                     FindStudent();
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     nhap = true;
                     break;
-                case '5':
-                    InsertStudentID();
+                case 5:
+                    system("cls");
+                    CreateStudentID();
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     nhap = true;
                     break;
-                case '6': 
-                    InsertEmail();
+                case 6: 
+                    system("cls");
+                    CreateEmail();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case '7':
+                case 7:
+                    system("cls");
                     PrintToFileReport();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case '8':
+                case 8:
+                    system("cls");
                     PrintToScreen();
                     nhap = true;
                     printf("Nhấn phím bất kì để tiếp tục");
                     getch();
                     break;
-                case '0':
+                case 0:
                     printf("\nBạn đã thoát khỏi chương trình thành công!!!");
                     nhap = false;
                     break;
@@ -963,36 +1051,4 @@ void MENU()
                     nhap = true;
             } 
         } while(nhap);
-}
-
-void RunProgram()
-{
-    SetConsoleOutputCP(65001);
-    int choice;
-    printf("1. Đăng nhập\n");
-    printf("2. Đăng kí tài khoản\n");
-    printf("3. Thoát chương trình\n");
-    printf("\nNhập lựa chọn của bạn: ");
-    scanf("%d",&choice);
-    getchar();
-    switch (choice)
-    {
-    case 1:
-        system("cls");
-        if (Login() == true)
-        {
-        Start();
-        MENU();
-        }
-        break;
-    case 2:
-        system("cls");
-        Register();
-        Start();
-        MENU();
-        break;
-    case 3:
-        printf("Thoát chương trình thành công!\n");
-        return;
-    }
 }
