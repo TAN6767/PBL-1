@@ -50,32 +50,6 @@ char ClassFindName[MAX_SIZE];
 int StdCount = 0;
 char checksort;
 
-void RemoveEnter(char x[]);
-void MakeNULL(char x[]);
-char *rTrim(char x[]);
-char *lTrim(char x[]);
-char *trim(char x[]);
-char *NameStr(char x[]);
-void CreateClass(char filename[]);
-void SwapStudent(STUDENT *student1, STUDENT *student2);
-void BubbleSort(STUDENT Student[], int StdCount);
-void ReadStudentFile(FILE *file, int *StdCount);
-void PrintToFile(FILE *file, STUDENT Student[], int StdCount);
-void Input_Student(STUDENT *student);
-void AddStudent();
-void SortStudent();
-void CreateStudentID();
-void CreateEmail();
-void FindStudent();
-void RemoveStudent();
-void PrintToFileReport();
-void PrintToScreen();
-void Start();
-bool Login();
-bool CheckRegister(char username[]);
-void Register();
-void MENU();
-
 void RemoveEnter(char x[])
 {
     size_t len = strlen(x);
@@ -192,35 +166,25 @@ void BubbleSort(STUDENT Student[], int StdCount)
         }
 }
 
-void ReadStudentFile(FILE *file, int *StdCount)
-{
-    int i = 0;
+void ReadStudentFile(FILE* file, int* StdCount) {
     char line[100];
-    while (fgets(line, sizeof(line), file))
-    {
-        char LastName[Max_LastName], FirstName[Max_FirstName], Birthday[Max_Date], Gender[Max_Gender], Address[Max_Address], ID[10], Email[30];
-        sscanf(line, "%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^\n]", LastName, FirstName, Birthday, Gender, Address, ID, Email);
-
-        strcpy(Student[i].ID, ID);
-        strcpy(Student[i].LastName , LastName);
-        strcpy(Student[i].FirstName, FirstName);
-        strcpy(Student[i].Birthday, Birthday);
-        strcpy(Student[i].Gender, Gender);
-        strcpy(Student[i].Address, Address);
-        strcpy(Student[i].email, Email);
-        i++;
+    while (fgets(line, sizeof(line), file)) {
+        STUDENT student;
+        sscanf(line, "%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^\n]",
+               student.LastName, student.FirstName, student.Birthday,
+               student.Gender, student.Address, student.ID, student.email);
+        Student[(*StdCount)++] = student;
     }
-    *StdCount = i;
-    for (i = 0; i < *StdCount; i++)
+    for (int i = 0; i < *StdCount; i++)
         if (Student[i].ID[0] != '1')
             MakeNULL(Student[i].ID);
-    for (i = 0; i < *StdCount; i++)
+    for (int i = 0; i < *StdCount; i++)
         if (Student[i].email[0] != '1')
             MakeNULL(Student[i].email);
-    for (i = *StdCount ; i > 0 ; i--)
+    for (int i = *StdCount ; i > 0 ; i--)
         if (strcmp(Student[i].ID, Student[i-1].ID) == 0)
             MakeNULL(Student[i].ID);
-    for (i = *StdCount ; i > 0 ; i-- )
+    for (int i = *StdCount ; i > 0 ; i-- )
         if (strcmp(Student[i].email, Student[i-1].email) == 0)
             MakeNULL(Student[i].email);
 }
